@@ -1,5 +1,6 @@
+import 'package:dyslexia_frontend/pages/register_page.dart';
 import 'package:flutter/material.dart';
-
+import 'login_page.dart'; // Import LoginPage
 class LandingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -18,14 +19,20 @@ class LandingPage extends StatelessWidget {
             SizedBox(height: 40),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/login');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
               },
               child: Text('Login'),
             ),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/signup');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => RegisterPage()),
+                );
               },
               child: Text('Register'),
             ),

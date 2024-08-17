@@ -1,3 +1,4 @@
+import 'package:dyslexia_frontend/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -22,8 +23,10 @@ class _RegisterPageState extends State<RegisterPage> {
     );
 
     if (response.statusCode == 201) {
-      // Handle successful signup
-      Navigator.pop(context); // Go back to login page
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
     } else {
       // Handle signup failure
       showDialog(
