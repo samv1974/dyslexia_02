@@ -4,6 +4,7 @@ from Config.database import collection_name, client  # Assuming you have a Mongo
 from Schemas.schemas import List_serial
 from bson import ObjectId
 import re
+import uuid
 
 router = APIRouter()
 
@@ -28,11 +29,26 @@ async def post_user(user: Users_reg):
         raise HTTPException(status_code=400,
                             detail="Password does not meet complexity requirements. It must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special symbol.")
 
-    if user.password == user.confirm_pass:
-        collection_name.insert_one(dict(user))
-        return {"message": "User successfully registered!"}
-    else:
+    if user.password != user.confirm_pass:
         raise HTTPException(status_code=400, detail="Passwords do not match.")
+    
+    # Generate a unique UID
+    uid = str(uuid.uuid4())
+
+    # Construct user data with uid as the first field
+    user_data = {
+        "uid": uid,
+        "username":user.username,
+        "email": user.email,
+        "password": user.password,
+        "confirm_pass": user.confirm_pass
+        
+    }
+
+    # Insert the user data with the UID into the collection
+    collection_name.insert_one(user_data)
+    
+    return {"message": "User successfully registered!", "uid": uid}
 
 
 @router.post("/login")
