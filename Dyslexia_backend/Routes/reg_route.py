@@ -19,7 +19,7 @@ email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
 password_regex = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'
 
 
-@router.post("/post_user")
+@router.post("/register")
 async def post_user(user: Users_reg):
     if not re.match(email_regex, user.email):
         raise HTTPException(status_code=400, detail="Invalid email format.")
