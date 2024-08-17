@@ -3,14 +3,19 @@ from Routes.reg_route import router
 from pymongo.mongo_client import MongoClient
 from Routes.score_route import router2
 from urllib.parse import quote_plus
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
-username = quote_plus("krssn")
-password = quote_plus("krssn@capstone")
 
-# Construct the URI
-uri = f"mongodb+srv://{username}:{password}@dyslexia.9bswy.mongodb.net/?retryWrites=true&w=majority&appName=Dyslexia"
-client = MongoClient(uri)
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # You can restrict to specific domains
+    allow_credentials=True,
+    allow_methods=["*"],  # You can restrict methods
+    allow_headers=["*"],  # You can restrict headers
+)
+
 app.include_router(router)
 app.include_router(router2)
 
