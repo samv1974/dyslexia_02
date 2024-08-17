@@ -1,3 +1,4 @@
+import 'package:dyslexia_frontend/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -22,8 +23,10 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     if (response.statusCode == 200) {
-      // Handle successful login
-      // Navigate to the dashboard or home screen
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
     } else {
       // Handle login failure
       showDialog(
