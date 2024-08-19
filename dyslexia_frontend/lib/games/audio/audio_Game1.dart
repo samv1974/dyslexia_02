@@ -1,3 +1,4 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -5,17 +6,12 @@ import '../../data/quiz_data.dart';
 
 class AudioGame1 extends StatelessWidget {
   final int questionIndex;
+  final List<List<String>> questions;
 
-  AudioGame1({required this.questionIndex});
+  AudioGame1({required this.questionIndex, required this.questions});
 
   @override
   Widget build(BuildContext context) {
-    //List<string> questions = quizData['audio'][0];
-    List<List<String>> questions = [
-      ["assets/audio_Game1_1_Cat.png", "Cat", "assets/audio_Game1_1_Bat.png", "Bat"],
-      ["assets/audio_Game1_2_Wall.png", "Wall", "assets/audio_Game1_2_Ball.png", "Ball"],
-      ["assets/audio_Game1_3_Man.png", "Man", "assets/audio_Game1_3_Fan.png", "Fan"],
-    ];
 
     return SingleChildScrollView(
       child: Column(
@@ -23,7 +19,7 @@ class AudioGame1 extends StatelessWidget {
         children: [
           Transform.scale(
             scale: 0.5,
-            child: Image.asset(questions[questionIndex][0])),
+            child: Image.network(questions[questionIndex][0])),
           Text(
             questions[questionIndex][1],
             style: TextStyle(fontSize: 18.0),
@@ -32,7 +28,7 @@ class AudioGame1 extends StatelessWidget {
           SizedBox(height: 20),
           Transform.scale(
             scale: 0.5,
-            child: Image.asset(questions[questionIndex][2])),
+            child: Image.network(questions[questionIndex][2])),
           SizedBox(height: 20),
           TextField(
             decoration: InputDecoration(
@@ -53,3 +49,7 @@ class AudioGame1 extends StatelessWidget {
     );
   }
 }
+
+
+
+
