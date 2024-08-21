@@ -34,6 +34,6 @@ def generate_image(prompt):
         raise Exception(str(response.json()))
 
 # Add a block to run the function when the script is executed directly
-if __name__ == "__main__":
-    prompt = "man is dancing on tree with mowgli like dressup and snake swrapped in his neck"
-    generate_image(prompt)
+# if __name__ == "__main__":
+#     prompt = "man is dancing on tree with mowgli like dressup and snake swrapped in his neck"
+#     generate_image(prompt)
