@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from Routes.reg_route import router
 from pymongo.mongo_client import MongoClient
 from Routes.score_route import router2
+from Routes.api_route import router3
 from urllib.parse import quote_plus
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -18,4 +19,5 @@ app.add_middleware(
 
 app.include_router(router)
 app.include_router(router2)
+app.include_router(router3)
 
