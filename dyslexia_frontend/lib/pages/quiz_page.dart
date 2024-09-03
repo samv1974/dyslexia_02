@@ -28,12 +28,14 @@ class _QuizPageState extends State<QuizPage> {
   }
 
   Future<void> _fetchQuestions() async {
-    final String url = 'https://127.0.0.1/questions';
+    final String url = 'http://127.0.0.1:8000/questions';
     final response = await http.get(Uri.parse(url));
-
+    print(response.body);
     if (response.statusCode == 200) {
       setState(() {
-        questions = json.decode(response.body)['questions'];
+        questions = json.decode(response.body)['audio_quiz'];
+
+        
       });
     } else {
       // Handle error

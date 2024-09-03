@@ -72,8 +72,8 @@ class AudioGame1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Extract data from the JSON structure based on your backend's format.
-    final String? img1Url = questions['img1'];
-    final String? label1 = questions['label1'];
+    final String? img1Url = questions['img'];
+    final String? label1 = questions['label'];
     final String? img2Url = questions['img2'];
 
     return SingleChildScrollView(
