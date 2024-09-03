@@ -5,7 +5,7 @@ import 'dart:convert';
 
 class AudioGame1 extends StatelessWidget {
   final int questionIndex;
-  final List<Map<String, String>> questions;
+  final Map<String, dynamic> questions;
 
   AudioGame1({required this.questionIndex, required this.questions});
 
@@ -39,7 +39,7 @@ class AudioGame1 extends StatelessWidget {
 
   void _checkAnswer(BuildContext context) async {
     String userAnswer = _controller.text.trim();
-    String correctAnswer = questions[questionIndex]['ans'] ?? '';
+    String correctAnswer = questions['answer'] ?? '';
 
     double similarity = userAnswer.similarityTo(correctAnswer);
 
@@ -71,24 +71,32 @@ class AudioGame1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Extract data from the JSON structure based on your backend's format.
+    final String? img1Url = questions['img1'];
+    final String? label1 = questions['label1'];
+    final String? img2Url = questions['img2'];
+
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Transform.scale(
-            scale: 0.5,
-            child: Image.network(questions[questionIndex]['img1'] ?? ''),
-          ),
-          Text(
-            questions[questionIndex]['label1'] ?? '',
-            style: TextStyle(fontSize: 18.0),
-            textAlign: TextAlign.center,
-          ),
+          if (img1Url != null)
+            Transform.scale(
+              scale: 0.5,
+              child: Image.network(img1Url),
+            ),
+          if (label1 != null)
+            Text(
+              label1,
+              style: TextStyle(fontSize: 18.0),
+              textAlign: TextAlign.center,
+            ),
           SizedBox(height: 20),
-          Transform.scale(
-            scale: 0.5,
-            child: Image.network(questions[questionIndex]['img2'] ?? ''),
-          ),
+          if (img2Url != null)
+            Transform.scale(
+              scale: 0.5,
+              child: Image.network(img2Url),
+            ),
           SizedBox(height: 20),
           TextField(
             controller: _controller,

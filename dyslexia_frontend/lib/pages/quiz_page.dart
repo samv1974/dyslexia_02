@@ -18,8 +18,8 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
   int currentGameIndex = 0;
-  int currentQuestionIndex = 0;
-  List<List<String>> questions = [];
+  int currentQuestionIndex = 0; // Track the current question index
+  dynamic questions;
 
   @override
   void initState() {
@@ -28,12 +28,12 @@ class _QuizPageState extends State<QuizPage> {
   }
 
   Future<void> _fetchQuestions() async {
-    final String url = 'https://your-backend-url/${widget.quizType}_Game${currentGameIndex + 1}';
+    final String url = 'https://127.0.0.1/questions';
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
       setState(() {
-        questions = List<List<String>>.from(json.decode(response.body));
+        questions = json.decode(response.body)['questions'];
       });
     } else {
       // Handle error
@@ -42,63 +42,104 @@ class _QuizPageState extends State<QuizPage> {
   }
 
   Widget _getGameWidget(int gameIndex) {
-    if (questions.isEmpty) {
+    if (questions == null) {
       return Center(child: CircularProgressIndicator());
     }
+
     switch (widget.quizType) {
       case 'audio':
         switch (gameIndex) {
           case 0:
-            return AudioGame1(questionIndex: currentQuestionIndex, questions: questions);
+            return AudioGame1(
+              questionIndex: currentQuestionIndex,
+              questions: questions['audio_game1'],
+            );
           case 1:
-            return AudioGame2(questionIndex: currentQuestionIndex, questions: questions);
+            return AudioGame2(
+              questionIndex: currentQuestionIndex,
+              questions: questions['audio_game2'],
+            );
           case 2:
-            return AudioGame3(questionIndex: currentQuestionIndex, questions: questions);
-          // Add more cases for other quiz types
+            return AudioGame3(
+              questionIndex: currentQuestionIndex,
+              questions: questions['audio_game3'],
+            );
         }
         break;
       case 'visual':
         switch (gameIndex) {
           case 0:
-            return AudioGame1(questionIndex: currentQuestionIndex, questions: questions);
+            return AudioGame1(
+              questionIndex: currentQuestionIndex,
+              questions: questions['audio_game1'],
+            );
           case 1:
-            return AudioGame2(questionIndex: currentQuestionIndex, questions: questions);
+            return AudioGame2(
+              questionIndex: currentQuestionIndex,
+              questions: questions['audio_game2'],
+            );
           case 2:
-            return AudioGame3(questionIndex: currentQuestionIndex, questions: questions);
-          // Add more cases for other quiz types
+            return AudioGame3(
+              questionIndex: currentQuestionIndex,
+              questions: questions['audio_game3'],
+            );
         }
         break;
       case 'speed':
         switch (gameIndex) {
           case 0:
-            return AudioGame1(questionIndex: currentQuestionIndex, questions: questions);
+            return AudioGame1(
+              questionIndex: currentQuestionIndex,
+              questions: questions['audio_game1'],
+            );
           case 1:
-            return AudioGame2(questionIndex: currentQuestionIndex, questions: questions);
+            return AudioGame2(
+              questionIndex: currentQuestionIndex,
+              questions: questions['audio_game2'],
+            );
           case 2:
-            return AudioGame3(questionIndex: currentQuestionIndex, questions: questions);
-          // Add more cases for other quiz types
+            return AudioGame3(
+              questionIndex: currentQuestionIndex,
+              questions: questions['audio_game3'],
+            );
         }
         break;
       case 'memory':
         switch (gameIndex) {
           case 0:
-            return AudioGame1(questionIndex: currentQuestionIndex, questions: questions);
+            return AudioGame1(
+              questionIndex: currentQuestionIndex,
+              questions: questions['audio_game1'],
+            );
           case 1:
-            return AudioGame2(questionIndex: currentQuestionIndex, questions: questions);
+            return AudioGame2(
+              questionIndex: currentQuestionIndex,
+              questions: questions['audio_game2'],
+            );
           case 2:
-            return AudioGame3(questionIndex: currentQuestionIndex, questions: questions);
-          // Add more cases for other quiz types
+            return AudioGame3(
+              questionIndex: currentQuestionIndex,
+              questions: questions['audio_game3'],
+            );
         }
         break;
       case 'language':
         switch (gameIndex) {
           case 0:
-            return AudioGame1(questionIndex: currentQuestionIndex, questions: questions);
+            return AudioGame1(
+              questionIndex: currentQuestionIndex,
+              questions: questions['audio_game1'],
+            );
           case 1:
-            return AudioGame2(questionIndex: currentQuestionIndex, questions: questions);
+            return AudioGame2(
+              questionIndex: currentQuestionIndex,
+              questions: questions['audio_game2'],
+            );
           case 2:
-            return AudioGame3(questionIndex: currentQuestionIndex, questions: questions);
-          // Add more cases for other quiz types
+            return AudioGame3(
+              questionIndex: currentQuestionIndex,
+              questions: questions['audio_game3'],
+            );
         }
         break;
     }
@@ -122,17 +163,17 @@ class _QuizPageState extends State<QuizPage> {
               onPressed: () {
                 setState(() {
                   currentQuestionIndex++;
-                  if (currentQuestionIndex >= questions.length) {
-                    currentQuestionIndex = 0;
+                  if (currentQuestionIndex >= 3) {
                     currentGameIndex++;
+                    currentQuestionIndex = 0;
                     if (currentGameIndex >= 3) {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => HomePage()),
                       );
-                    } else {
-                      _fetchQuestions();
                     }
+                  } else {
+                    _fetchQuestions();
                   }
                 });
               },
