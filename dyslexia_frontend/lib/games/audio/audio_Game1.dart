@@ -6,8 +6,13 @@ import 'dart:convert';
 class AudioGame1 extends StatelessWidget {
   final int questionIndex;
   final Map<String, dynamic> questions;
+  final Function(double score) onGameCompleted;  // Define the callback
 
-  AudioGame1({required this.questionIndex, required this.questions});
+  AudioGame1({
+    required this.questionIndex,
+    required this.questions,
+    required this.onGameCompleted,  // Pass this callback from the parent
+  });
 
   final TextEditingController _controller = TextEditingController();
 
@@ -61,6 +66,9 @@ class AudioGame1 extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pop();
                 _controller.clear();
+
+                // Call the onGameCompleted callback after the answer is processed
+                onGameCompleted(similarity * 100);  // Pass the similarity score to the parent widget
               },
             ),
           ],
@@ -108,7 +116,7 @@ class AudioGame1 extends StatelessWidget {
           SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
-              _checkAnswer(context);
+              _checkAnswer(context);  // Check the answer when the button is pressed
             },
             child: Text('Submit Answer'),
           ),

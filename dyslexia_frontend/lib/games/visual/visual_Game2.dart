@@ -9,8 +9,9 @@ import '../../data/quiz_data.dart';
 class VisualGame2 extends StatelessWidget {
   final int questionIndex;
   final List<List<String>> questions;
+  final Function(double score) onGameCompleted;
 
-  VisualGame2({required this.questionIndex, required this.questions});
+  VisualGame2({required this.questionIndex, required this.questions, required this.onGameCompleted,});
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +44,7 @@ class VisualGame2 extends StatelessWidget {
             onPressed: () {
               // Handle answer submission or proceed to the next question
               // (Next question handling will be done in quiz_page.dart)
+              onGameCompleted(0.12 * 100);
             },
             child: Text('Submit Answer'),
           ),
