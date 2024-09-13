@@ -16,5 +16,6 @@ db = client.dylexia_db
 collection_name = db["users_reg"]
 collection_name2 = db["questions"]
 collection_name3 = db["user_score"]
+collection_name4 = db["questions_generated"]
 
 # Now you can perform operations on these collections

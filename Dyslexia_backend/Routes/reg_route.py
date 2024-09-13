@@ -64,11 +64,7 @@ async def login_user(user_data: dict):
 
     if db_user and db_user["password"] == password:
         user_id = db_user["uid"]
-        user_collection_name = f"question_{user_id}"
 
-        if user_collection_name not in client.dylexia_db.list_collection_names():
-            user_collection = client.dylexia_db[user_collection_name]
-            user_collection.insert_one({"message": "This is your personal collection"})
 
         return {"message": "Login successful!", "user_id": user_id}
     else:
