@@ -69,7 +69,7 @@ def generation(request: Dict):
     # Extract data
     label = question_data.audio_quiz.audio_game1.label
     answer = question_data.audio_quiz.audio_game1.answer
-    score = 90 # You can replace this with the actual score from the user data
+    score = 90
 
     prompt = generate_prompt(label, answer, score)
 
