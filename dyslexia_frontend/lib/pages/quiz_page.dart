@@ -124,7 +124,7 @@ class _QuizPageState extends State<QuizPage> {
       case 0:
         return AudioGame1(
           questionIndex: currentQuestionIndex,
-          questions: questions['audio_game1'],
+          questions: questions['audio_game1'],  
           onGameCompleted: (double score) {
             setState(() {
               scores['audio_game1'] = score;  // Store score for audio_game1
@@ -132,9 +132,9 @@ class _QuizPageState extends State<QuizPage> {
           },
         );
       case 1:
-        return AudioGame2(
+        return AudioGame1(
           questionIndex: currentQuestionIndex,
-          questions: questions['audio_game2'],
+          questions: questions['audio_game1'],   //CHANGE IT AFTER ALL THREE GAMES ARE DONE
           onGameCompleted: (double score) {
             setState(() {
               scores['audio_game2'] = score;  // Store score for audio_game2
@@ -142,9 +142,9 @@ class _QuizPageState extends State<QuizPage> {
           },
         );
       case 2:
-        return AudioGame3(
+        return AudioGame1(
           questionIndex: currentQuestionIndex,
-          questions: questions['audio_game3'],
+          questions: questions['audio_game1'],   //CHANGE IT AFTER ALL THREE GAMES ARE DONE
           onGameCompleted: (double score) {
             setState(() {
               scores['audio_game3'] = score;  // Store score for audio_game3
