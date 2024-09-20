@@ -4,12 +4,10 @@ import 'package:string_similarity/string_similarity.dart';
 import 'dart:convert';
 
 class AudioGame1 extends StatelessWidget {
-  final int questionIndex;
   final Map<String, dynamic> questions;
   final Function(double score) onGameCompleted;  // Define the callback
 
   AudioGame1({
-    required this.questionIndex,
     required this.questions,
     required this.onGameCompleted,  // Pass this callback from the parent
   });
@@ -26,7 +24,6 @@ class AudioGame1 extends StatelessWidget {
           'Content-Type': 'application/json',
         },
         body: jsonEncode({
-          'questionIndex': questionIndex,
           'similarityScore': similarityScore,
           'userId': 'user-id-here', // Include user ID if necessary
         }),

@@ -41,11 +41,14 @@ class _QuizPageState extends State<QuizPage> {
   }
 
   Future<void> _fetchQuestions() async {
+    //UPDATE THIS FUNCTION AFTER ALL GAMES ARE MADE
     final String url = 'http://127.0.0.1:8000/questions';  // Example URL, replace with your actual backend endpoint
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       setState(() {
+        print(response.body);
         questions = json.decode(response.body)['audio_quiz'];  // Load questions for the specific quiz type
+        
       });
     } else {
       // Handle error
@@ -55,18 +58,16 @@ class _QuizPageState extends State<QuizPage> {
 
   // This function will send the scores once the entire quiz (all games) is completed
   Future<void> _submitQuizScore() async {
+    print(scores);
     final String url = 'http://127.0.0.1:8000/submit_score';  // Replace with your actual backend endpoint
 
     // Construct the payload with the quiz type and accumulated scores
     final Map<String, dynamic> scoreData = {
-      "uid": "002",  // Replace with the actual user ID
-      "scores": {
-        "${widget.quizType}Quiz": {
-          "type": _getQuizType(),
-          "score": scores  // Send the accumulated score map for all games in this quiz
-        }
-      }
+      "uid": "002",
+      "${widget.quizType}Quiz": scores,
     };
+     
+    
 
     final response = await http.post(
       Uri.parse(url),
@@ -75,6 +76,7 @@ class _QuizPageState extends State<QuizPage> {
     );
 
     if (response.statusCode == 200) {
+      print(scoreData);
       print("Score submitted successfully");
     } else {
       print("Failed to submit score");
@@ -123,7 +125,6 @@ class _QuizPageState extends State<QuizPage> {
     switch (gameIndex) {
       case 0:
         return AudioGame1(
-          questionIndex: currentQuestionIndex,
           questions: questions['audio_game1'],  
           onGameCompleted: (double score) {
             setState(() {
@@ -132,8 +133,7 @@ class _QuizPageState extends State<QuizPage> {
           },
         );
       case 1:
-        return AudioGame1(
-          questionIndex: currentQuestionIndex,
+        return AudioGame2(
           questions: questions['audio_game1'],   //CHANGE IT AFTER ALL THREE GAMES ARE DONE
           onGameCompleted: (double score) {
             setState(() {
@@ -142,8 +142,7 @@ class _QuizPageState extends State<QuizPage> {
           },
         );
       case 2:
-        return AudioGame1(
-          questionIndex: currentQuestionIndex,
+        return AudioGame3(
           questions: questions['audio_game1'],   //CHANGE IT AFTER ALL THREE GAMES ARE DONE
           onGameCompleted: (double score) {
             setState(() {
@@ -159,7 +158,6 @@ class _QuizPageState extends State<QuizPage> {
     switch (gameIndex) {
       case 0:
         return VisualGame1(
-          questionIndex: currentQuestionIndex,
           questions: questions['visual_game1'],
           onGameCompleted: (double score) {
             setState(() {
@@ -169,7 +167,6 @@ class _QuizPageState extends State<QuizPage> {
         );
       case 1:
         return VisualGame2(
-          questionIndex: currentQuestionIndex,
           questions: questions['visual_game2'],
           onGameCompleted: (double score) {
             setState(() {
@@ -179,7 +176,6 @@ class _QuizPageState extends State<QuizPage> {
         );
       case 2:
         return VisualGame3(
-          questionIndex: currentQuestionIndex,
           questions: questions['visual_game3'],
           onGameCompleted: (double score) {
             setState(() {
@@ -195,7 +191,6 @@ class _QuizPageState extends State<QuizPage> {
     switch (gameIndex) {
       case 0:
         return SpeedGame1(
-          questionIndex: currentQuestionIndex,
           questions: questions['speed_game1'],
           onGameCompleted: (double score) {
             setState(() {
@@ -205,7 +200,6 @@ class _QuizPageState extends State<QuizPage> {
         );
       case 1:
         return SpeedGame2(
-          questionIndex: currentQuestionIndex,
           questions: questions['speed_game2'],
           onGameCompleted: (double score) {
             setState(() {
@@ -215,7 +209,6 @@ class _QuizPageState extends State<QuizPage> {
         );
       case 2:
         return SpeedGame3(
-          questionIndex: currentQuestionIndex,
           questions: questions['speed_game3'],
           onGameCompleted: (double score) {
             setState(() {
@@ -231,7 +224,6 @@ class _QuizPageState extends State<QuizPage> {
     switch (gameIndex) {
       case 0:
         return MemoryGame1(
-          questionIndex: currentQuestionIndex,
           questions: questions['memory_game1'],
           onGameCompleted: (double score) {
             setState(() {
@@ -241,7 +233,6 @@ class _QuizPageState extends State<QuizPage> {
         );
       case 1:
         return MemoryGame2(
-          questionIndex: currentQuestionIndex,
           questions: questions['memory_game2'],
           onGameCompleted: (double score) {
             setState(() {
@@ -251,7 +242,6 @@ class _QuizPageState extends State<QuizPage> {
         );
       case 2:
         return MemoryGame3(
-          questionIndex: currentQuestionIndex,
           questions: questions['memory_game3'],
           onGameCompleted: (double score) {
             setState(() {
@@ -267,7 +257,6 @@ class _QuizPageState extends State<QuizPage> {
     switch (gameIndex) {
       case 0:
         return LanguageGame1(
-          questionIndex: currentQuestionIndex,
           questions: questions['language_game1'],
           onGameCompleted: (double score) {
                       setState(() {
@@ -277,7 +266,6 @@ class _QuizPageState extends State<QuizPage> {
       );
     case 1:
       return LanguageGame2(
-        questionIndex: currentQuestionIndex,
         questions: questions['language_game2'],
         onGameCompleted: (double score) {
           setState(() {
@@ -287,7 +275,6 @@ class _QuizPageState extends State<QuizPage> {
       );
     case 2:
       return LanguageGame3(
-        questionIndex: currentQuestionIndex,
         questions: questions['language_game3'],
         onGameCompleted: (double score) {
           setState(() {
@@ -316,17 +303,15 @@ Widget build(BuildContext context) {
           ElevatedButton(
             onPressed: () {
               setState(() {
-                currentQuestionIndex++;
 
                 // Check if all questions for the current game are completed
-                if (currentQuestionIndex >= 3) {
-                  currentGameIndex++;
-                  currentQuestionIndex = 0;
+                
 
                   // Check if all games for the quiz are completed
                   if (currentGameIndex >= 3) {
                     // Post the score for the entire quiz
                     _submitQuizScore();
+                    
 
                     // Navigate to the home page after the quiz is completed
                     Navigator.push(
@@ -336,8 +321,9 @@ Widget build(BuildContext context) {
                   } else {
                     // Load the next game
                     _fetchQuestions();
+                    currentGameIndex++;
                   }
-                }
+                
               });
             },
             child: Text('Next Question'),
