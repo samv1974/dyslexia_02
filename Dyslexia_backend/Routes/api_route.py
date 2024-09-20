@@ -30,15 +30,6 @@ def post_question(question: Questions):
     collection_name2.insert_one(question.dict())
     return {"message": "Question added successfully"}
 
-@router3.get("/questions")
-def get_questions():
-    questions = collection_name2.find_one({})
-    if not questions:
-        raise HTTPException(status_code=404, detail="No data found")
-    questions["_id"] = str(questions["_id"])  # Convert ObjectId to string
-    return questions
-
-
 def generate_prompt(label: str, answer: str, score: int) -> str:
     return f"""
         Given the words "{label}" and "{answer}", and considering the user's performance score of {score}, generate a new list of rhyming words that follow a **completely unrelated rhyme scheme**.
@@ -51,6 +42,9 @@ def generate_prompt(label: str, answer: str, score: int) -> str:
         Ensure that the new words differ not only in complexity but also in the rhyme pattern from the provided ones, and that the rhyme scheme is completely unrelated to the original.
         give response in format [new word1,new word2]
     """
+
+def generate_prompt2():
+    return """ give me only the words nothing else"""
 
 
 @router3.post("/generation")
@@ -72,11 +66,12 @@ def generation(request: Dict):
     score = 90
 
     prompt = generate_prompt(label, answer, score)
-
+    prompt2 = generate_prompt2()
     chat_session = model.start_chat(history=[])
     response = chat_session.send_message(prompt)
-
-    return {"response": response.text}
+    response1 = chat_session.send_message(prompt2)
+    a = response1.text.split()
+    return {"label": a[0],"answer": a[1]}
 
 @router3.post("/question/{id}")
 def generated_questions(details: Dict):
