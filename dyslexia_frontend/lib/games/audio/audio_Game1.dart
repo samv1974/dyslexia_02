@@ -4,12 +4,10 @@ import 'package:string_similarity/string_similarity.dart';
 import 'dart:convert';
 
 class AudioGame1 extends StatelessWidget {
-  final int questionIndex;
   final Map<String, dynamic> questions;
   final Function(double score) onGameCompleted;  // Define the callback
 
   AudioGame1({
-    required this.questionIndex,
     required this.questions,
     required this.onGameCompleted,  // Pass this callback from the parent
   });
@@ -26,7 +24,6 @@ class AudioGame1 extends StatelessWidget {
           'Content-Type': 'application/json',
         },
         body: jsonEncode({
-          'questionIndex': questionIndex,
           'similarityScore': similarityScore,
           'userId': 'user-id-here', // Include user ID if necessary
         }),
@@ -43,39 +40,40 @@ class AudioGame1 extends StatelessWidget {
   }
 
   void _checkAnswer(BuildContext context) async {
-    String userAnswer = _controller.text.trim();
-    String correctAnswer = questions['answer'] ?? '';
+  String userAnswer = _controller.text.trim();
+  String correctAnswer = questions['answer'] ?? '';
 
-    double similarity = userAnswer.similarityTo(correctAnswer);
+  double similarity = userAnswer.similarityTo(correctAnswer);
 
-    await _postScore(similarity);
+  // Remove this part: await _postScore(similarity); 
 
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Answer Result'),
-          content: Text(
-            similarity >= 0.8
-                ? 'Correct! Similarity score: ${(similarity * 100).toStringAsFixed(2)}%'
-                : 'Try again! Similarity score: ${(similarity * 100).toStringAsFixed(2)}%',
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Answer Result'),
+        content: Text(
+          similarity >= 0.8
+              ? 'Correct! Similarity score: ${(similarity * 100).toStringAsFixed(2)}%'
+              : 'Try again! Similarity score: ${(similarity * 100).toStringAsFixed(2)}%',
+        ),
+        actions: [
+          TextButton(
+            child: Text('OK'),
+            onPressed: () {
+              Navigator.of(context).pop();
+              _controller.clear();
+
+              // Call the onGameCompleted callback after the answer is processed
+              onGameCompleted(similarity * 100);  // Pass the similarity score to the parent widget
+            },
           ),
-          actions: [
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                _controller.clear();
+        ],
+      );
+    },
+  );
+}
 
-                // Call the onGameCompleted callback after the answer is processed
-                onGameCompleted(similarity * 100);  // Pass the similarity score to the parent widget
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
