@@ -14,31 +14,7 @@ class AudioGame1 extends StatelessWidget {
 
   final TextEditingController _controller = TextEditingController();
 
-  Future<void> _postScore(double similarityScore) async {
-    final String apiUrl = 'https://127.0.0.1/post_audioGame1'; // Replace with your backend URL
-
-    try {
-      final response = await http.post(
-        Uri.parse(apiUrl),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({
-          'similarityScore': similarityScore,
-          'userId': 'user-id-here', // Include user ID if necessary
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        print('Score submitted successfully');
-      } else {
-        print('Failed to submit score: ${response.statusCode}');
-      }
-    } catch (error) {
-      print('Error submitting score: $error');
-    }
-  }
-
+  
   void _checkAnswer(BuildContext context) async {
   String userAnswer = _controller.text.trim();
   String correctAnswer = questions['answer'] ?? '';

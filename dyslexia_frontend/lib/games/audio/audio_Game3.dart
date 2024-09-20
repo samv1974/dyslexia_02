@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 import '../../data/quiz_data.dart';
 
 class AudioGame3 extends StatelessWidget {
-  final List<List<String>> questions;
+  final dynamic questions;
   final Function(double score) onGameCompleted;
 
   AudioGame3({required this.questions, required this.onGameCompleted,});
@@ -18,6 +18,15 @@ class AudioGame3 extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text("audio_game3"),
+          TextButton(
+            child: Text('OK'),
+            onPressed: () {
+              
+
+              // Call the onGameCompleted callback after the answer is processed
+              onGameCompleted(30);  // Pass the similarity score to the parent widget
+            },
+          ),
         ],
       ),
     );

@@ -58,17 +58,18 @@ class _QuizPageState extends State<QuizPage> {
 
   // This function will send the scores once the entire quiz (all games) is completed
   Future<void> _submitQuizScore() async {
+    print("scores are:");
     print(scores);
     final String url = 'http://127.0.0.1:8000/submit_score';  // Replace with your actual backend endpoint
 
     // Construct the payload with the quiz type and accumulated scores
     final Map<String, dynamic> scoreData = {
       "uid": "002",
+      "type": widget.quizType,
       "${widget.quizType}Quiz": scores,
     };
      
-    
-
+    print("scoreData: $scoreData");
     final response = await http.post(
       Uri.parse(url),
       headers: {"Content-Type": "application/json"},
@@ -308,8 +309,9 @@ Widget build(BuildContext context) {
                 
 
                   // Check if all games for the quiz are completed
-                  if (currentGameIndex >= 3) {
+                  if (currentGameIndex >= 2) {
                     // Post the score for the entire quiz
+                    
                     _submitQuizScore();
                     
 
